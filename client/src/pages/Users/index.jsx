@@ -1,15 +1,19 @@
 import axios from "axios";
+import { GrEdit } from "react-icons/gr";
 import React, { useEffect, useState } from "react";
 import RoleModal from "../../compoments/RoleModal";
-import ComponentModal  from "./../../compoments/ComponentModal";
-import { GrEdit } from "react-icons/gr";
+import ComponentModal from "./../../compoments/ComponentModal";
+import UserModal from "../../compoments/UserModal";
 export default function Users() {
-    const [roles, setRoles] = useState([]);
     const [role, setRole] = useState(null);
-    const [isOpenRole, setIsOpenRole] = useState(false);
-    const [isOpenComponent, setIsOpenComponent] = useState(false);
-    const [components, setComponents] = useState([]);
+    const [user, setUser] = useState(null);
     const [component, setComponent] = useState(null);
+    const [roles, setRoles] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [components, setComponents] = useState([]);
+    const [isOpenRole, setIsOpenRole] = useState(false);
+    const [isOpenUser, setIsOpenUser] = useState(false);
+    const [isOpenComponent, setIsOpenComponent] = useState(false);
     const [req, setReq] = useState(null);
     const getAllRoles = async () => {
         try {
@@ -32,11 +36,21 @@ export default function Users() {
             console.log(error)
         }
     }
+    const getAllUsers = async () => {
+        try {
+            const res = await axios.get('/users');
+            if (res.data.success) {
+                setUsers(res.data?.data);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
     const handelComponentUpdate = async (id) => {
-    const data = components.filter((data)=> data._id == id)[0];
-       setReq('update');
-       setComponent(data);
-       setIsOpenComponent(true);
+        const data = components.filter((data) => data._id == id)[0];
+        setReq('update');
+        setComponent(data);
+        setIsOpenComponent(true);
     }
     const handelRoleUpdate = async (id) => {
         const data = roles.filter((data) => data._id === id)[0]
@@ -44,26 +58,44 @@ export default function Users() {
         setRole(data)
         setIsOpenRole(true)
     }
+    const handelUserUpdate = async (id) => {
+        const data = users.filter((data) => data._id === id)[0];
+        setReq('update')
+        setUser(data)
+        setIsOpenUser(true)
+    }
     useEffect(() => {
         getAllRoles()
         getAllComponents()
+        getAllUsers()
 
     }, [])
     return (
         <>
             {isOpenRole && <RoleModal
                 req={req}
+                isOpenRole={isOpenRole}
                 setIsOpenRole={setIsOpenRole}
                 role={role}
                 roles={roles}
                 setRoles={setRoles}
             />}
-              {isOpenComponent && <ComponentModal
+            {isOpenComponent && <ComponentModal
                 req={req}
+                isOpenComponent={isOpenComponent}
                 setIsOpenComponent={setIsOpenComponent}
                 component={component}
                 components={components}
                 setComponents={setComponents}
+            />}
+            {isOpenUser && <UserModal
+                req={req}
+                isOpenUser={isOpenUser}
+                setIsOpenUser={setIsOpenUser}
+                user={user}
+                users={users}
+                setUsers={setUsers}
+                roles={roles}
             />}
 
             <div className="h-screen flex flex-col">
@@ -71,7 +103,7 @@ export default function Users() {
                     <div className="basic-1/3">
                         <button
                             className="w-60 h-10 focus:outline-none rounded-full text-black  bg-sky-600 hover:bg-purple-600 hover:text-white  ring-2 "
-
+                            onClick={() => (setIsOpenUser(true), setReq('create'), setUser(null))}
                         >
                             <span> + </span>
                             <span className="mr-2">add</span>
@@ -89,10 +121,10 @@ export default function Users() {
                         </button>
                     </div>
                     <div className="basic-1/3">
-                        <button 
-                             className="w-60 h-10 focus:outline-none rounded-full text-black  bg-sky-600 hover:bg-purple-600 hover:text-white  ring-2 "
-                            onClick={()=>(setIsOpenComponent(true), setReq('create'), setComponent(null))}
-                             >
+                        <button
+                            className="w-60 h-10 focus:outline-none rounded-full text-black  bg-sky-600 hover:bg-purple-600 hover:text-white  ring-2 "
+                            onClick={() => (setIsOpenComponent(true), setReq('create'), setComponent(null))}
+                        >
                             <span> + </span>
                             <span className="mr-2">add</span>
                             <span className="text-lg  font-medium">component</span>
@@ -103,29 +135,15 @@ export default function Users() {
                     <div className="flex flec-row md:justify-between p-3 justify-center gap-10">
                         <div className="basic-1/3">
                             <div className="flex flex-col space-y-4 ">
-                                {components.map((component, index) => (
+                                {users.map((user, index) => (
                                     <div key={index}
                                         className="flex justify-between items-center space-x-20 bg-slate-200 p-3 "
                                     >
-
-                                        <span className="text-bold">{component.name}</span>
-                                        <div className="flex justify-center">
-                                            {!component.isActive ?
-                                                <span className="bg-red-100 text-red-800 text-xs font-medium p-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-
-                                                    UnActive
-                                                </span> :
-                                                <span className="bg-green-100 text-green-800 text-xs font-medium p-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-
-                                                    Active
-                                                </span>
-                                            }
-                                            <span className=" pl-4" onClick={() => handelComponentUpdate(component._id)}>
-                                                <GrEdit/>
-                                            </span>
-                                        </div>
-
-
+                                        <span className="text-bold">{user?.email.split('@')[0]}</span>
+                                        <span className="text-bold">{user?.role.name}</span>
+                                        <span className=" pl-4" onClick={() => handelUserUpdate(user._id)}>
+                                                <GrEdit />
+                                        </span>
                                     </div>
                                 ))}
                             </div>
@@ -149,7 +167,7 @@ export default function Users() {
                                                 </span>
                                             }
                                             <span className=" pl-4" onClick={() => handelRoleUpdate(role._id)}>
-                                                <GrEdit/>
+                                                <GrEdit />
                                             </span>
                                         </div>
 
@@ -177,7 +195,7 @@ export default function Users() {
                                                 </span>
                                             }
                                             <span className="pl-4" onClick={() => handelComponentUpdate(component._id)}>
-                                               <GrEdit/>
+                                                <GrEdit />
                                             </span>
                                         </div>
 

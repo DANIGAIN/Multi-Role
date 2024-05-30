@@ -2,56 +2,64 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import Modal from 'react-modal';
+import {modalStyles} from './../utils/constant'
 
 export default function ComponentModal(props) {
     const [isLoading, setIsLoading] = useState(false);
-    const { req, setIsOpenComponent, components, setComponents, component } = props;
+    const { req, setIsOpenComponent, components, setComponents, component ,isOpenComponent} = props;
     const { register, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: component ? {
-          name: component.name,
-          isActive: component.isActive,
+            name: component.name,
+            isActive: component.isActive,
         } : {}
-      });
+    });
 
 
-    const onSubmit = async(data) => {
+    const onSubmit = async (data) => {
         setIsLoading(true)
-        try{  
-            if(req === 'create'){
+        try {
+            if (req === 'create') {
                 const res = await axios.post('/components', data);
-                if(res.data.success){
+                if (res.data.success) {
                     setComponents([res.data.data, ...components])
                     toast.success(res.data?.message);
                 }
-            }else if(req === 'update'){
+            } else if (req === 'update') {
                 const res = await axios.put(`/components/${component._id}`, data);
-                if(res.data.success){
-                    const filderCom= components.filter((data)=> data._id !== component._id); 
+                if (res.data.success) {
+                    const filderCom = components.filter((data) => data._id !== component._id);
                     data._id = component._id;
-                    setComponents([data , ...filderCom]);
+                    setComponents([data, ...filderCom]);
                     toast.success(res.data?.message);
                 }
             }
             reset()
             setIsOpenComponent(false)
-        
-        }catch(error){
-           console.log(error);
-           setIsLoading(false)
-        }finally{
+
+        } catch (error) {
+            console.log(error);
+            setIsLoading(false)
+        } finally {
             setIsLoading(false)
         }
-    
+
     }
-  
+
     return (
-        <> 
-            <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-75 flex justify-center items-center">
-                <div className="bg-white rounded-lg shadow-lg p-8">
+        <>
+            <div>
+                <Modal
+                    isOpen={isOpenComponent}
+                    style={modalStyles}
+                    contentLabel="User Modal"
+                    appElement={document.getElementById('root')}
+                    onRequestClose={() => setIsOpenComponent(false)}
+                >
                     <div className="flex flex-row">
-                        <p className="text-xl font-medium mb-4">{req} component</p>
+                        <p className="text-xl font-medium mb-4">{req} Component</p>
                         <span className="text-lg  pl-40 hover:text-red-600 "
-                           onClick={()=> setIsOpenComponent(false)}
+                            onClick={() => setIsOpenComponent(false)}
                         >X</span>
                     </div>
 
@@ -97,7 +105,7 @@ export default function ComponentModal(props) {
                                 id="checkbox"
                                 type="checkbox"
                                 {
-                                    ...register('isActive')
+                                ...register('isActive')
                                 }
                                 name="isActive"
                                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
@@ -119,8 +127,8 @@ export default function ComponentModal(props) {
                                 </button>}
                         </div>
                     </form>
+                </Modal>l
 
-                </div>
             </div>
         </>
     )

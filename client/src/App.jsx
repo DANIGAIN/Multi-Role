@@ -4,7 +4,8 @@ import Login from './pages/Login';
 import { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 import Users from './pages/Users';
-
+import Modal from 'react-modal';
+Modal.setAppElement('#root');
 function App() {
   axios.defaults.baseURL = 'http://localhost:8000/api/v1';
   axios.defaults.withCredentials = true;
