@@ -1,15 +1,19 @@
 const mongoose = require('mongoose');
 const mapingSchema = new mongoose.Schema({
-    componentId:{
+    component:{
         type:mongoose.Types.ObjectId,
-        ref:'Compoment'
+        ref:'Component',
+        required:true
     },
-    RoleId:{
+    role:{
         type:mongoose.Types.ObjectId,
-        ref:'Role'
+        ref:'Role',
+        required:true
     }
-},{
-    timestamps:true
-})
-const RC_Maping = mongoose.models.RCMaping || mongoose.model("RC_Maping", mapingSchema);
+}, { 
+    timestamps:true,
+});
+mapingSchema.index({ component: 1, role: 1 }, { unique: true });
+
+const RC_Maping = mongoose.models.RC_Maping || mongoose.model("RC_Maping", mapingSchema);
 module.exports =  RC_Maping;

@@ -3,6 +3,7 @@ const express = require('express');
 const userRoutesV1 = require('./../v1/routes/user.route');
 const roleRoutesV1 = require('./../v1/routes/role.route');
 const componentRoutesV1 = require('./../v1/routes/compoment.route');
+const mapingRoutesV1 = require('./../v1/routes/maping.route');
 const cors = require("cors");
 const app  = express();
 app.use(
@@ -21,6 +22,8 @@ app.use(express.urlencoded({extended:false}));
 app.use('/api/v1', userRoutesV1)
 app.use('/api/v1', roleRoutesV1)
 app.use('/api/v1', componentRoutesV1);
+app.use('/api/v1', mapingRoutesV1);
+
 
 app.listen(process.env.PORT , ()=>{
     console.log(`app is running .... on port :${process.env.PORT}`);

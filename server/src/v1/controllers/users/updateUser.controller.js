@@ -14,11 +14,12 @@ const updateUser = async (req, res) => {
         const data = req.body;
         const obj = {};
         if (data?.email) obj.email = data.email;
+        if (data?.username) obj.username = data.username;
         if (data?.password) obj.password = await hashPassword(data.password);
         if (data?.role) obj.role = data.role;
         await User.findByIdAndUpdate({ _id: id }, { $set: obj }, { new: true });
         const updateUser = await User.findById(id).populate('role', '_id name');
-        jwt.sign({ email: updateUser.email, role: updateUser.role.name }, process.env.JWT_SECRET, {}, (error, token) => {
+        jwt.sign({ email: updateUser.email, role: updateUser.role.name, username: updateUser.username }, process.env.JWT_SECRET, {}, (error, token) => {
             if (error) throw error;
             res.cookie('token', token, {
                 expires: new Date(Date.now() + 2589200000),

@@ -18,7 +18,9 @@ export default function Login() {
                 navigate('/')
             }
         } catch (error) {
-            console.log(error)
+            if(!error.response.data.success){
+                    toast.error(error.response.data.message)
+            }
             setIsLoading(false)
         } finally {
             setIsLoading(false)

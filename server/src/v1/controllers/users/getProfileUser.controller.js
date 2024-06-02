@@ -14,7 +14,7 @@ const getprofileUser = async (req, res) => {
         }
         
         const user = await jwt.verify(token , process.env.JWT_SECRET);
-        return res.status(404).json({
+        return res.status(200).json({
             data:user,
             success:true,  
             message:"Find current user"
