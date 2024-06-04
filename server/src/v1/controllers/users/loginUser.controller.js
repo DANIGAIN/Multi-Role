@@ -18,7 +18,7 @@ const loginUser = async(req, res) => {
     if(!matched){
         return res.status(400).json(CustomError.badRequestError({ message: "Incurrent Password"}))
     }
-    jwt.sign({ email: user.email,role:user.role.name}, process.env.JWT_SECRET, {}, (error, token) => {
+    jwt.sign({ _id:user._id, email: user.email,role:user.role.name ,roleId:user.role._id }, process.env.JWT_SECRET, {}, (error, token) => {
         if (error) throw error;
         res.cookie('token', token, {
             expires: new Date(Date.now() + 2589200000),

@@ -17,14 +17,14 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended:false}));
 
-//routes --->
-
+//routes --->   
+             
 app.use('/api/v1', userRoutesV1)
 app.use('/api/v1', roleRoutesV1)
 app.use('/api/v1', componentRoutesV1);
 app.use('/api/v1', mapingRoutesV1);
 
 
-app.listen(process.env.PORT , ()=>{
-    console.log(`app is running .... on port :${process.env.PORT}`);
+app.listen(process.env.PORT, ()=>{
+    console.log(`app is running .... on port : ${process.env.PORT}`);
 })

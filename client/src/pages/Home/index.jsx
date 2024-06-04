@@ -1,11 +1,14 @@
 import { useState } from "react";
+import DefaultLayout from "../../compoments/DefaultLayout";
 
 const Home = () => {
     return (
         <>
-            <div className="flex bg-gray-200 h-screen justify-center items-center">
-                <p className="text-black font-serif text-lg"> welcome to my app</p>
-            </div>
+            <DefaultLayout>
+                <div className="flex  justify-center items-center">
+                    <p className="text-black font-serif text-lg"> welcome to my app</p>
+                </div>
+            </DefaultLayout>
         </>
     )
 }

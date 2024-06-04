@@ -5,6 +5,7 @@ const getAllUsers = require('./../controllers/users/getAllUsers.controller');
 const updateUser = require('./../controllers/users/updateUser.controller');
 const getProfileUser = require('./../controllers/users/getProfileUser.controller');
 const getUser = require('./../controllers/users/getUser.controller');
+const logoutUser = require('./../controllers/users/logoutUser.controller');
 const {adminMiddleware} = require('./../../middlewares/auth.middleware');
 
 
@@ -16,6 +17,7 @@ router.get('/users',adminMiddleware, getAllUsers);
 router.put('/users/:id',adminMiddleware, updateUser);
 router.get('/users/profile',getProfileUser);
 router.get('/users/:id',adminMiddleware, getUser);
-
+router.delete('/users/logout/:id', logoutUser);
+   
 module.exports = router;
-
+  

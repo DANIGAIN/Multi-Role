@@ -1,25 +1,27 @@
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { GlobalContext } from '../../context'
 
 export default function Login() {
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors } } = useForm()
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { setUser } = useContext(GlobalContext);
     const onSubmit = async (data) => {
         setIsLoading(true)
         try {
             const res = await axios.post('/users/login', data);
             if (res.data.success) {
-                console.log(res.data);
+                setUser((prev) => ({ ...prev, isLogin: true }));
                 toast.success('login successfull');
                 navigate('/')
             }
         } catch (error) {
-            if(!error.response.data.success){
-                    toast.error(error.response.data.message)
+            if (!error.response.data.success) {
+                toast.error(error.response.data.message)
             }
             setIsLoading(false)
         } finally {

@@ -5,8 +5,6 @@ import toast from "react-hot-toast";
 import Modal from 'react-modal';
 import { modalStyles } from './../utils/constant'
 
-
-
 export default function UserModal(props) {
     const [isLoading, setIsLoading] = useState(false);
     const { req, setIsOpenUser, users, setUsers, user, roles, isOpenUser } = props;
