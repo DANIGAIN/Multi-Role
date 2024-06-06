@@ -7,10 +7,10 @@ const getMapingByUserRole = async (req, res) => {
         const {roleId} = req.params;
         console.log(roleId)
         const data = await RC_Maping.find({role:roleId})
-        .populate('role component' ,'_id name');
+        .populate('role component' ,'_id name isActive');
         return res.status(201).json({
             message: "Find  component by user role Successfully",
-            data,
+            data, 
             success: true
         })
 

@@ -3,7 +3,7 @@ const formatError = (err)=>{
         message: err.message ? err.message : err.toString(),
         success: false 
     } 
-    return error 
+    return error;
 }
 class CustomError{
     static internalServerError(err){
@@ -47,6 +47,14 @@ class CustomError{
             ...error,
             status:404
         }
+    }
+    static validationError(err){
+        const error = formatError(err);
+        return {
+            ...error,
+            status:422
+        }
+
     }
     static throwError(err){
         const error = new Error(err.message);

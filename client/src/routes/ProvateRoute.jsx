@@ -24,7 +24,6 @@ const PrivateRoute = () => {
     return <div>Loading...</div>;
   }
 
-  console.log(user)
   if (user?.role !== 'Supper-Admin') {
     return <Navigate to="/" replace />;
   }

@@ -1,10 +1,11 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
+import { ImProfile } from "react-icons/im";
 import axios from 'axios'
 import { Link } from 'react-router-dom';
 import { GlobalContext } from '../context';
 import toast from 'react-hot-toast';
 function Header() {
-  const { user, setUser, permission, setPermission,} = useContext(GlobalContext);
+  const { user, setUser, permission, setPermission, } = useContext(GlobalContext);
   const handleLogout = async () => {
     try {
       const res = await axios.delete(`/users/logout/${user._id}`);
@@ -17,21 +18,19 @@ function Header() {
       console.log(error)
     }
   }
-  console.log(permission)
   return (
     <header>
       <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-          <a href="/" className="flex items-center">
-            <img
-              src={''}
-              className="mr-3 h-6 sm:h-9 rounded-lg"
-              alt="Sondani Logo"
-            />
+          <Link to="/" className="flex items-center">
+            <div className='text-white pr-3 text-xl '>
+
+              <ImProfile />
+            </div>
             <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-              Sondani
+              CMS
             </span>
-          </a>
+          </Link>
           <div className="flex items-center lg:order-2">
             {user.isLogin ?
               <button
@@ -55,55 +54,17 @@ function Header() {
             id="mobile-menu-2"
           >
             <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-
               {
                 permission.map((data, index) => (
                   <div key={index}>
                     {
-                      data.component.name == 'service' ? (
+                      data.role._id == user.roleId && data.component.isActive ?(
                         <li>
                           <Link
-                            to="/services"
+                            to={`${data.component.name}`}
                             className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
                           >
-                            Services
-                          </Link>
-                        </li>
-                      ) : data.component.name == 'doctor' ? (
-                        <li>
-                          <Link
-                            href="/doctors"
-                            className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                          >
-                            Doctors
-                          </Link>
-                        </li>
-                      ) : data.component.name === 'contact' ? (
-                        <li>
-                          <Link
-                            href="/contact"
-                            className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                          >
-                            Contact
-                          </Link>
-                        </li>
-                      ) : data.component.name === 'home' ? (
-                        <li>
-                          <Link
-                            to="/"
-                            className="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white"
-                            aria-current="page"
-                          >
-                            Home
-                          </Link>
-                        </li>
-                      ) : data.component.name === 'about' ? (
-                        <li>
-                          <Link
-                            to="/about"
-                            className="block py-2 pr-4  text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                          >
-                            About
+                            {data.component.name}
                           </Link>
                         </li>
                       ) : null
