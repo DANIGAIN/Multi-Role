@@ -24,3 +24,15 @@ export const phoneValidation = z
     .trim()
     .min(10, { message: "Phone must be at list 10 characters !" })
     .max(20, { message: "phone must not more than 20 characters !" })
+
+export const titleValidation = z
+    .string({ required_error: "Title is required !"})
+    .trim()
+    .min(2, { message: "Title must be at list 2 characters !" })
+    .max(200, { message: "Title must not more than 200 characters !" })
+
+export const descriptionValidation = z
+    .string({ required_error: "Description is required !"})
+    .trim()
+    .min(2, { message: "Description must be at list 2 characters !" })
+    .max(200, { message: "Description must not more than 200 characters !" })

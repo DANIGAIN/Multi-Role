@@ -1,7 +1,8 @@
 const formatSuccess = (succ)=>{
     const success = {
         message: succ.message ? succ.message : succ.toString(),
-        success: true
+        success: true,
+        data : succ.data ? succ.data : {},
     } 
     return success;
 }
@@ -22,3 +23,4 @@ class CustomSuccess{
         }
     }
 }
+module.exports = CustomSuccess;
